@@ -8,13 +8,13 @@ import {
 } from 'react-native-vision-camera';
 import CameraScreen from './CameraScreen';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}: any) => {
   const [isOpenCamera, setIsOpenCamera] = useState(false);
 
   return (
     <View style={styles.container}>
        <Modal visible={isOpenCamera} animationType="slide">
-          <CameraScreen />
+          <CameraScreen navigation={navigation}/>
         </Modal>
       <View>
         <Pressable onPress={() => setIsOpenCamera(true)}>
