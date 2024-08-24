@@ -1557,7 +1557,7 @@
   resolved "https://registry.npmjs.org/@rneui/themed/-/themed-4.0.0-rc.8.tgz"
   integrity sha512-8L/XOrL9OK/r+/iBLvx63TbIdZOXF8SIjN9eArMYm6kRbMr8m4BitXllDN8nBhBsSPNYvL6EAgjk+i2MfY4sBA==
 
-"@rnmapbox/maps@^10.1.28":
+"@rnmapbox/maps@^10.1.4":
   version "10.1.28"
   resolved "https://registry.npmjs.org/@rnmapbox/maps/-/maps-10.1.28.tgz"
   integrity sha512-+jc66jlQFEsJ1Uny8vF07TfZBk1h3TH61URn6umGRMsIZvPSJLT6LKt8Jn3XZkVJFXcA3PjQ4MDaxCbZ4/qeRQ==
@@ -4694,6 +4694,11 @@ react-native-linear-gradient@^2.8.3:
   version "2.8.3"
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
   integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
+
+react-native-quick-sqlite@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.npmjs.org/react-native-quick-sqlite/-/react-native-quick-sqlite-8.1.0.tgz"
+  integrity sha512-PxAWo/xiBULcD+E+jC+zSJlu3xPYzJhPBXKN5WeyfIyID1dXJ6vm2q1ic5166q9m8ZxpDM+JC9ZhaAHGw9N3wA==
 
 react-native-ratings@^8.1.0:
   version "8.1.0"
