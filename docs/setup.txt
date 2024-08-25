@@ -1,0 +1,3 @@
+# lib for help me request and check permissions of the mobile device has the ability to access
+npm i @react-native-community/geolocation
+

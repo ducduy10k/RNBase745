@@ -1,11 +1,17 @@
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
+import {UserLocation} from '@rnmapbox/maps';
 import CustomIcon from '../components/CustomIcon';
 import {
   CameraProps,
   CameraRef,
+  CameraStop,
 } from '@rnmapbox/maps/lib/typescript/src/components/Camera';
+import Geolocation from '@react-native-community/geolocation';
+import GeoLocateControl from '../ui/map/control/GeoLocateControl';
+import {Text} from '@rneui/base';
+import {generateString} from '../utils/common';
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiYmV0YXBjaG9pMTBrIiwiYSI6ImNsd2o1cGRmcTBxZGsyaXBmd2J2emRwc28ifQ.sg6Y6R2AWkqU5v0HwXHCyQ',
 );
@@ -16,10 +22,11 @@ interface MapboxScreenProps {
 
 const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
   let cameraRef = useRef<CameraRef | null>(null);
-  const [mapCameraState, setMapCameraState] = useState<CameraProps>({
+  const [isCameraInit, setIsCameraInit] = useState(false);
+  const [havePermission, setHavePermission] = useState<boolean>(false);
+  const [mapCameraState, setMapCameraState] = useState<CameraStop>({
     centerCoordinate: [105.80946796710893, 21.02346518415829],
     zoomLevel: 16,
-    followUserLocation: true,
     padding: {
       paddingBottom: 10,
       paddingLeft: 10,
@@ -32,21 +39,63 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
     navigation.pop();
   };
 
+  useEffect(() => {
+    requestMapPremission().then(() => {
+      setHavePermission(true);
+    });
+  }, []);
+
+  function requestMapPremission() {
+    return new Promise((resolve, reject) => {
+      Geolocation.requestAuthorization(() => {
+        resolve(true);
+      }, reject);
+    });
+  }
+
   return (
     <View style={styles.page}>
       <Mapbox.MapView
+        scaleBarEnabled={false}
         style={styles.map}
         styleURL={'mapbox://styles/mapbox/streets-v12'}
         testID={'mapbox'}>
         <Mapbox.Camera
-          ref={ref => (cameraRef.current = ref)}
-          defaultSettings={mapCameraState}
-          ></Mapbox.Camera>
+          ref={ref => {
+            cameraRef.current = ref;
+            if (ref) {
+              setIsCameraInit(true);
+            }
+          }}
+          followUserLocation={true}
+          defaultSettings={mapCameraState}></Mapbox.Camera>
+        {havePermission && (
+          <UserLocation
+            animated
+            minDisplacement={10}
+            androidRenderMode="compass"
+            requestsAlwaysUse={true}
+            visible={true}
+          />
+        )}
       </Mapbox.MapView>
       <View style={styles.backBtn}>
         <TouchableOpacity onPress={() => backHandler()}>
           <CustomIcon name="left" lib="Ant" size={16} color={'white'} />
         </TouchableOpacity>
+      </View>
+      <View style={styles.btnControlTopRight}>
+        <TouchableOpacity>
+          <CustomIcon name="search1" lib="Ant" size={16} color={'white'} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.btnControlBottomRight}>
+        <GeoLocateControl
+          key={generateString(5)}
+          mapCamera={cameraRef.current}
+          defaultStatus={!havePermission || !isCameraInit ? 'unavailable' : 'crosshairsGps'}
+        />
       </View>
     </View>
   );
@@ -62,6 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   map: {
+    flex: 1,
     width: '100%',
     height: Dimensions.get('window').height,
   },
@@ -71,9 +121,19 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 1,
     padding: 5,
-    borderWidth: 1,
-    borderRadius: 50,
-    borderColor: '#c1c1c1',
-    backgroundColor: '#ccc',
+  },
+  btnControlTopRight: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+    padding: 5,
+  },
+  btnControlBottomRight: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    zIndex: 1,
+    padding: 5,
   },
 });
