@@ -4,7 +4,6 @@ import Mapbox from '@rnmapbox/maps';
 import {UserLocation} from '@rnmapbox/maps';
 import CustomIcon from '../components/CustomIcon';
 import {
-  CameraProps,
   CameraRef,
   CameraStop,
 } from '@rnmapbox/maps/lib/typescript/src/components/Camera';
@@ -12,6 +11,7 @@ import Geolocation from '@react-native-community/geolocation';
 import GeoLocateControl from '../ui/map/control/GeoLocateControl';
 import {Text} from '@rneui/base';
 import {generateString} from '../utils/common';
+import SearchLocationControl from '../ui/map/control/SearchLocationControl';
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiYmV0YXBjaG9pMTBrIiwiYSI6ImNsd2o1cGRmcTBxZGsyaXBmd2J2emRwc28ifQ.sg6Y6R2AWkqU5v0HwXHCyQ',
 );
@@ -59,7 +59,9 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
         scaleBarEnabled={false}
         style={styles.map}
         styleURL={'mapbox://styles/mapbox/streets-v12'}
-        testID={'mapbox'}>
+        testID={'mapbox'}
+        rotateEnabled={true}
+        >
         <Mapbox.Camera
           ref={ref => {
             cameraRef.current = ref;
@@ -67,8 +69,9 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
               setIsCameraInit(true);
             }
           }}
-          followUserLocation={true}
-          defaultSettings={mapCameraState}></Mapbox.Camera>
+          // followUserLocation={true}
+          // defaultSettings={mapCameraState}
+        ></Mapbox.Camera>
         {havePermission && (
           <UserLocation
             animated
@@ -85,9 +88,7 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnControlTopRight}>
-        <TouchableOpacity>
-          <CustomIcon name="search1" lib="Ant" size={16} color={'white'} />
-        </TouchableOpacity>
+        <SearchLocationControl />
       </View>
 
       <View style={styles.btnControlBottomRight}>

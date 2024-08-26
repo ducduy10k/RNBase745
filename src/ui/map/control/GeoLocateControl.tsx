@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import CustomIcon from '../../../components/CustomIcon';
 import Mapbox from '@rnmapbox/maps';
@@ -23,9 +23,52 @@ const GeoLocateControl = ({
   const [isProcess, setIsProcess] = useState(false);
   const [geolocateStatus, setGeolocateStatus] =
     useState<GeolocationStatusType>(defaultStatus);
+    
   const handleCompass = () => {
     if (onPress) onPress();
+    Geolocation.getCurrentPosition(
+      (position: {
+        coords: {
+          latitude: number;
+          longitude: number;
+          altitude: number | null;
+          accuracy: number;
+          altitudeAccuracy: number | null;
+          heading: number | null;
+          speed: number | null;
+        };
+        timestamp: number;
+      }) => {
+        setGeolocateStatus('compass');
+        mapCamera?.setCamera({
+          centerCoordinate: [
+            position.coords.longitude,
+            position.coords.latitude,
+          ],
+          zoomLevel: 15,
+          animationMode: 'flyTo',
+          animationDuration: 1000,
+          pitch: 0,
+          heading: 0, // rotation
+        });
+        setGeolocateStatus('crosshairsGps');
+        setTimeout(() => {
+          setIsProcess(false);
+        }, 1000);
+      },
+      (error: {
+        code: number;
+        message: string;
+        PERMISSION_DENIED: number;
+        POSITION_UNAVAILABLE: number;
+        TIMEOUT: number;
+      }) => {
+        console.log(error);
+        setIsProcess(false);
+      },
+    );
   };
+
   const handleCrosshairsGPS = () => {
     if (onPress) onPress();
     if (isProcess) return;
@@ -52,6 +95,7 @@ const GeoLocateControl = ({
         };
         timestamp: number;
       }) => {
+        setGeolocateStatus('compass');
         mapCamera?.setCamera({
           centerCoordinate: [
             position.coords.longitude,
@@ -60,6 +104,8 @@ const GeoLocateControl = ({
           zoomLevel: 15,
           animationMode: 'flyTo',
           animationDuration: 1000,
+          pitch: 30,
+          heading: 30,
         });
         setTimeout(() => {
           setIsProcess(false);
@@ -77,6 +123,7 @@ const GeoLocateControl = ({
       },
     );
   };
+
   const handleCrosshairs = () => {
     if (onPress) onPress();
     if (isProcess) return;
@@ -103,6 +150,7 @@ const GeoLocateControl = ({
         };
         timestamp: number;
       }) => {
+        setGeolocateStatus('crosshairsGps');
         mapCamera?.setCamera({
           centerCoordinate: [
             position.coords.longitude,
@@ -147,7 +195,6 @@ const GeoLocateControl = ({
             lib="MaterialCommunity"
             size={28}
             color={Colors.primaryColor}
-            onPress={() => handleCrosshairs()}
           />
         );
       case 'crosshairsGps':
@@ -157,7 +204,6 @@ const GeoLocateControl = ({
             lib="MaterialCommunity"
             size={28}
             color={Colors.primaryColor}
-            onPress={() => handleCrosshairsGPS()}
           />
         );
       case 'compass':
@@ -167,7 +213,6 @@ const GeoLocateControl = ({
             lib="MaterialCommunity"
             size={28}
             color={Colors.primaryColor}
-            onPress={() => handleCompass()}
           />
         );
 
@@ -178,16 +223,44 @@ const GeoLocateControl = ({
             lib="MaterialCommunity"
             size={28}
             color={Colors.primaryColor}
-            onPress={() => handleCompass()}
           />
         );
     }
   };
-  console.log(geolocateStatus);
-  
-  return renderUI();
+
+  const handlePress = () => {
+    switch (geolocateStatus) {
+      case 'compass':
+        handleCompass();
+        break;
+      case 'crosshairsGps':
+        handleCrosshairsGPS();
+        break;
+      case 'crosshairs':
+        handleCrosshairs();
+        break;
+      case 'unavailable':
+        break;
+      default:
+        break;
+    }
+  };
+  return (
+    <Pressable onPress={() => handlePress()}>
+      <View style={styles.controlWrapper}>{renderUI()}</View>
+    </Pressable>
+  );
 };
 
 export default GeoLocateControl;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  controlWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
