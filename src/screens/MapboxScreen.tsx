@@ -8,10 +8,10 @@ import {
   CameraStop,
 } from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import Geolocation from '@react-native-community/geolocation';
-import GeoLocateControl from '../ui/map/control/GeoLocateControl';
+import GeoLocateControl from '../ui/map/control/geolocate/GeoLocateControl';
 import {Text} from '@rneui/base';
 import {generateString} from '../utils/common';
-import SearchLocationControl from '../ui/map/control/SearchLocationControl';
+import SearchLocationControl from '../ui/map/control/search-location/SearchLocationControl';
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiYmV0YXBjaG9pMTBrIiwiYSI6ImNsd2o1cGRmcTBxZGsyaXBmd2J2emRwc28ifQ.sg6Y6R2AWkqU5v0HwXHCyQ',
 );

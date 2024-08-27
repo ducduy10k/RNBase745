@@ -16,6 +16,7 @@ export interface IconOption {
   color: string;
   style: StyleProp<ViewStyle> | undefined;
   lib: LibCustomIconType;
+  onPress?: () => void;
 }
 
 interface CustomInputGroupProps {
@@ -50,6 +51,7 @@ const CustomInputGroupIcon: React.FC<Partial<CustomInputGroupProps>> = ({
           color={iconLeft.color}
           size={iconLeft.size}
           style={iconLeft.style}
+          onPress={iconLeft?.onPress}
         />
       ) : (
         <></>
@@ -69,6 +71,7 @@ const CustomInputGroupIcon: React.FC<Partial<CustomInputGroupProps>> = ({
           color={iconRight.color}
           size={iconRight.size}
           style={iconRight.style}
+          onPress={iconLeft?.onPress}
         />
       ) : (
         <></>

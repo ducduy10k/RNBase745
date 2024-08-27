@@ -1,8 +1,8 @@
 import {Pressable, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
-import CustomIcon from '../../../components/CustomIcon';
+import CustomIcon from '../../../../components/CustomIcon';
 import Mapbox from '@rnmapbox/maps';
-import Colors from '../../../constants/color.constant';
+import Colors from '../../../../constants/color.constant';
 import Geolocation from '@react-native-community/geolocation';
 
 type GeolocationStatusType =
