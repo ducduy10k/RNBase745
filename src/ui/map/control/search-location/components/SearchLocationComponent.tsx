@@ -15,15 +15,18 @@ interface SearchLocationComponentProps {
 const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
   const [searchString, setSearchString] = useState('');
   let [recentList, setRecentList] = useState<RecentSearchItemI[]>([]);
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<RecentSearchItemI[]>([]);
   const myTimeOut = useRef<any>();
+  
   useEffect(() => {
     getRecentList();
   }, []);
+  
   async function getRecentList() {
     const rl = await AsyncStorage.getItem('RecentList');
     setRecentList(rl ? JSON.parse(rl) : []);
   }
+
   useEffect(() => {
     if (!searchString) {
       setSuggestions([]);
@@ -33,7 +36,19 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
       clearTimeout(myTimeOut.current);
     }
     myTimeOut.current = setTimeout(() => {
-      search(searchString).then(async () => {});
+      search(searchString).then(async (res) => {
+        res.data.features.map((feature: any) => {
+          console.log(feature.properties.context);
+        });
+        setSuggestions(res.data.features.map((feature: any) => ({
+          feature,
+          id: generateString(10),
+          icon: 'arrow-top-left',
+          lib: 'MaterialCommunity',
+          text: feature.properties.full_address,
+          deleteable: false,
+        })));
+      });
     }, 500);
   }, [searchString]);
   useEffect(() => {
@@ -116,7 +131,7 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
         </View>
         <View style={styles.recentSearchContentWrapper}>
           <RecentSearchList
-            items={recentList}
+            items={recentList.filter(item => item.text.includes(searchString))}
             onDelete={item => {
               const index = recentList.findIndex(i => i.id === item.id);
               if (index > -1) {
@@ -124,6 +139,19 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
                 setRecentList([...recentList]);
               }
             }}
+          />
+        </View>
+        <View></View>
+      </View>
+      <View style={styles.recentSearchs}>
+        <View style={styles.recentSearchHeaderWrapper}>
+          <Text style={styles.recentText}>Kết quả</Text>
+          <CustomIcon name="infocirlceo" lib="Ant" size={16} />
+        </View>
+        <View style={styles.recentSearchContentWrapper}>
+          <RecentSearchList
+            items={suggestions}
+            onDelete={() => {}}
           />
         </View>
         <View></View>

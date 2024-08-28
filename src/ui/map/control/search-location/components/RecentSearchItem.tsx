@@ -6,15 +6,9 @@ export interface RecentSearchItemI {
   id: string;
   icon: string;
   lib: LibCustomIconType;
-  addressLine?: string;
-  cityCode?: string;
-  cityName?: string;
-  districtCode?: string;
-  districtName?: string;
-  wardCode?: string;
-  wardName?: string;
   text: string;
   deleteable?: boolean;
+  feature: any;
 }
 interface RecentSearchItemProps {
   item: RecentSearchItemI;
