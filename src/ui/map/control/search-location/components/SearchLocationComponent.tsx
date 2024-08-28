@@ -146,7 +146,6 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
       <View style={styles.recentSearchs}>
         <View style={styles.recentSearchHeaderWrapper}>
           <Text style={styles.recentText}>Kết quả</Text>
-          <CustomIcon name="infocirlceo" lib="Ant" size={16} />
         </View>
         <View style={styles.recentSearchContentWrapper}>
           <RecentSearchList
