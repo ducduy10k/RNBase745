@@ -9,7 +9,7 @@ const SearchLocationControl = () => {
     <Pressable onPress={() => setIsModalSearchOpen(true)}>
       <View style={styles.controlWrapper}>
         <Modal visible={isModalSearchOpen} animationType="slide">
-          <SearchLocationComponent />
+          <SearchLocationComponent onBack={() => setIsModalSearchOpen(false)}/>
         </Modal>
         <CustomIcon name="search1" lib="Ant" size={16} />
       </View>

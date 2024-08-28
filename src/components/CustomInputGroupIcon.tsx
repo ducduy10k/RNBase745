@@ -71,7 +71,7 @@ const CustomInputGroupIcon: React.FC<Partial<CustomInputGroupProps>> = ({
           color={iconRight.color}
           size={iconRight.size}
           style={iconRight.style}
-          onPress={iconLeft?.onPress}
+          onPress={iconRight?.onPress}
         />
       ) : (
         <></>

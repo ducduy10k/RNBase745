@@ -1,11 +1,44 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Alert, Dimensions, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import CustomInputGroupIcon from '../../../../../components/CustomInputGroupIcon';
 import Colors from '../../../../../constants/color.constant';
 import CustomIcon from '../../../../../components/CustomIcon';
+import RecentSearchList from './RecentSearchList';
+import {search} from '../../../../../api/mapbox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {generateString} from '../../../../../utils/common';
+import {RecentSearchItemI} from './RecentSearchItem';
 
-const SearchLocationComponent = () => {
+interface SearchLocationComponentProps {
+  onBack: () => void;
+}
+const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
   const [searchString, setSearchString] = useState('');
+  let [recentList, setRecentList] = useState<RecentSearchItemI[]>([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const myTimeOut = useRef<any>();
+  useEffect(() => {
+    getRecentList();
+  }, []);
+  async function getRecentList() {
+    const rl = await AsyncStorage.getItem('RecentList');
+    setRecentList(rl ? JSON.parse(rl) : []);
+  }
+  useEffect(() => {
+    if (!searchString) {
+      setSuggestions([]);
+      return;
+    }
+    if (myTimeOut.current) {
+      clearTimeout(myTimeOut.current);
+    }
+    myTimeOut.current = setTimeout(() => {
+      search(searchString).then(async () => {});
+    }, 500);
+  }, [searchString]);
+  useEffect(() => {
+    AsyncStorage.setItem('RecentList', JSON.stringify(recentList));
+  }, [recentList]);
   return (
     <View style={styles.root}>
       <View style={styles.searchControlWrapper}>
@@ -17,6 +50,7 @@ const SearchLocationComponent = () => {
             style: {
               paddingLeft: 10,
             },
+            onPress: onBack,
           }}
           iconRight={
             searchString
@@ -26,6 +60,9 @@ const SearchLocationComponent = () => {
                   size: 24,
                   style: {
                     paddingRight: 10,
+                  },
+                  onPress: () => {
+                    setSearchString('');
                   },
                 }
               : {
@@ -37,17 +74,57 @@ const SearchLocationComponent = () => {
                   },
                 }
           }
+          placeholder="Tìm kiếm"
+          value={searchString}
           onChangeText={setSearchString}
+          props={{
+            returnKeyType: 'done',
+            async onSubmitEditing() {
+              // Do something
+              const createdTime = new Date();
+              AsyncStorage.setItem('RecentList', JSON.stringify(recentList));
+              setRecentList((state: any) => {
+                console.log(recentList);
+                let newState = [...state];
+                if (state.length > 5) {
+                  newState = state.slice(
+                    recentList.length - 4,
+                    recentList.length,
+                  );
+                }
+                return [
+                  ...newState,
+                  {
+                    id: generateString(10),
+                    text: searchString,
+                    createdTime,
+                    icon: 'clockcircleo',
+                    lib: 'Ant',
+                    deleteable: true,
+                  },
+                ];
+              });
+            },
+          }}
           style={styles.input}
         />
       </View>
       <View style={styles.recentSearchs}>
         <View style={styles.recentSearchHeaderWrapper}>
           <Text style={styles.recentText}>Gần đây</Text>
-          <CustomIcon name='infocirlceo' lib='Ant' size={16} />
+          <CustomIcon name="infocirlceo" lib="Ant" size={16} />
         </View>
         <View style={styles.recentSearchContentWrapper}>
-
+          <RecentSearchList
+            items={recentList}
+            onDelete={item => {
+              const index = recentList.findIndex(i => i.id === item.id);
+              if (index > -1) {
+                recentList.splice(index, 1);
+                setRecentList([...recentList]);
+              }
+            }}
+          />
         </View>
         <View></View>
       </View>
@@ -73,28 +150,26 @@ const styles = StyleSheet.create({
   },
   root: {
     backgroundColor: Colors.gray100,
-    flex: 1
+    flex: 1,
   },
   searchControlWrapper: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginBottom: 15,
-    backgroundColor: Colors.whiteColor
+    backgroundColor: Colors.whiteColor,
   },
   recentSearchs: {
     backgroundColor: 'white',
-    padding: 20
+    padding: 20,
   },
   recentSearchHeaderWrapper: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: '100%'
+    width: '100%',
   },
-  recentSearchContentWrapper: {
-
-  },
+  recentSearchContentWrapper: {},
   recentText: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
