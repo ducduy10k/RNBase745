@@ -25,3 +25,6 @@ Write :w to write all data on file.
 Now write :q to quit from file.
 You successfully save the file.
 Run Pod install
+
+
+brew install cocoapods
