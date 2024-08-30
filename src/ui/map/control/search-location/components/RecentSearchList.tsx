@@ -5,14 +5,15 @@ import RecentSearchItem, {RecentSearchItemI} from './RecentSearchItem';
 interface RecentSearchListProps {
   items: RecentSearchItemI[];
   onDelete: (item: RecentSearchItemI) => void;
+  onPress: (item: RecentSearchItemI) => void;
 }
 
-const RecentSearchList = ({items, onDelete}: RecentSearchListProps) => {
+const RecentSearchList = ({items, onDelete, onPress}: RecentSearchListProps) => {
   
   return (
     <View>
       {items.map(item => (
-        <RecentSearchItem key={item.id} item={item} onPress={() => {}} onDelete={() => onDelete(item)} />
+        <RecentSearchItem key={item.id} item={item} onPress={() => onPress(item)} onDelete={() => onDelete(item)} />
       ))}
     </View>
   );

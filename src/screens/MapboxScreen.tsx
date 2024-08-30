@@ -12,6 +12,7 @@ import GeoLocateControl from '../ui/map/control/geolocate/GeoLocateControl';
 import {Text} from '@rneui/base';
 import {generateString} from '../utils/common';
 import SearchLocationControl from '../ui/map/control/search-location/SearchLocationControl';
+import OfflineMapControl from '../ui/map/control/offline-map/OfflineMapControl';
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiYmV0YXBjaG9pMTBrIiwiYSI6ImNsd2o1cGRmcTBxZGsyaXBmd2J2emRwc28ifQ.sg6Y6R2AWkqU5v0HwXHCyQ',
 );
@@ -22,6 +23,7 @@ interface MapboxScreenProps {
 
 const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
   let cameraRef = useRef<CameraRef | null>(null);
+  let mapRef = useRef<Mapbox.MapView | null>(null);
   const [isCameraInit, setIsCameraInit] = useState(false);
   const [havePermission, setHavePermission] = useState<boolean>(false);
   const [mapCameraState, setMapCameraState] = useState<CameraStop>({
@@ -35,6 +37,7 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
     },
     animationDuration: 1000,
   });
+  
   const backHandler = () => {
     navigation.pop();
   };
@@ -56,12 +59,12 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
   return (
     <View style={styles.page}>
       <Mapbox.MapView
+        ref={mapRef}
         scaleBarEnabled={false}
         style={styles.map}
         styleURL={'mapbox://styles/mapbox/streets-v12'}
         testID={'mapbox'}
-        rotateEnabled={true}
-        >
+        rotateEnabled={true}>
         <Mapbox.Camera
           ref={ref => {
             cameraRef.current = ref;
@@ -88,14 +91,17 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnControlTopRight}>
-        <SearchLocationControl />
+        {cameraRef.current && <SearchLocationControl mapCamera={cameraRef.current} />}
+        {mapRef.current && <OfflineMapControl map={mapRef.current} />}
       </View>
 
       <View style={styles.btnControlBottomRight}>
         <GeoLocateControl
           key={generateString(5)}
           mapCamera={cameraRef.current}
-          defaultStatus={!havePermission || !isCameraInit ? 'unavailable' : 'crosshairsGps'}
+          defaultStatus={
+            !havePermission || !isCameraInit ? 'unavailable' : 'crosshairsGps'
+          }
         />
       </View>
     </View>
@@ -129,6 +135,7 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 1,
     padding: 5,
+    gap: 5,
   },
   btnControlBottomRight: {
     position: 'absolute',

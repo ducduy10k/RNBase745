@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CustomIcon, { LibCustomIconType } from '../../../../../components/CustomIcon';
 
@@ -22,9 +22,12 @@ const RecentSearchItem = ({item, onPress, onDelete}: RecentSearchItemProps) => {
       <View style={styles.recentItemIconWrapper}>
         <CustomIcon name={item.icon} lib={item.lib || 'Ant'} size={18}/>
       </View>
-      <View style={styles.recentItemTextWrapper}>
-        <Text style={styles.recentItemText}>{item.text}</Text>
-      </View>
+      <Pressable onPress={() => onPress()}>
+        <View style={styles.recentItemTextWrapper}>
+          <Text style={styles.recentItemText}>{item.text}</Text>
+        </View>
+      </Pressable>
+      
       {
         item.deleteable && (
           <View style={styles.recentItemDeleteWrapper}>

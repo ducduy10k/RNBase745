@@ -11,8 +11,9 @@ import {RecentSearchItemI} from './RecentSearchItem';
 
 interface SearchLocationComponentProps {
   onBack: () => void;
+  onPress: (item: RecentSearchItemI) => void;
 }
-const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
+const SearchLocationComponent = ({onBack, onPress}: SearchLocationComponentProps) => {
   const [searchString, setSearchString] = useState('');
   let [recentList, setRecentList] = useState<RecentSearchItemI[]>([]);
   const [suggestions, setSuggestions] = useState<RecentSearchItemI[]>([]);
@@ -39,6 +40,7 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
       search(searchString).then(async (res) => {
         res.data.features.map((feature: any) => {
           console.log(feature.properties.context);
+          console.log(feature.properties.coordinates);
         });
         setSuggestions(res.data.features.map((feature: any) => ({
           feature,
@@ -54,6 +56,7 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
   useEffect(() => {
     AsyncStorage.setItem('RecentList', JSON.stringify(recentList));
   }, [recentList]);
+
   return (
     <View style={styles.root}>
       <View style={styles.searchControlWrapper}>
@@ -139,6 +142,7 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
                 setRecentList([...recentList]);
               }
             }}
+            onPress={() => {}}
           />
         </View>
         <View></View>
@@ -151,6 +155,7 @@ const SearchLocationComponent = ({onBack}: SearchLocationComponentProps) => {
           <RecentSearchList
             items={suggestions}
             onDelete={() => {}}
+            onPress={(item) => onPress(item)}
           />
         </View>
         <View></View>
