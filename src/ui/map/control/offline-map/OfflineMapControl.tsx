@@ -1,7 +1,8 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, { useState } from 'react';
 import CustomIcon from '../../../../components/CustomIcon';
 import Mapbox from '@rnmapbox/maps';
+import ListCity from './components/ListCity';
 
 interface OfflineMapControlProps {
   map: Mapbox.MapView;
@@ -16,6 +17,7 @@ enum ControlStatus {
 
 const OfflineMapControl = ({map}: OfflineMapControlProps) => {
   const [percentage, setPercentage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [status, setStatus] = useState<ControlStatus>(ControlStatus.Idle);
   const handleDownload = async () => {
     const bounds = await map.getVisibleBounds();
@@ -53,7 +55,7 @@ const OfflineMapControl = ({map}: OfflineMapControlProps) => {
     switch(status) {
       case ControlStatus.Idle:
         return (
-          <Pressable onPress={() => handleDownload()}>
+          <Pressable onPress={() => setIsModalOpen(true)}>
             <View style={styles.controlWrapper}>
               <CustomIcon name="download" lib="Ant" size={16} />
             </View>
@@ -81,7 +83,14 @@ const OfflineMapControl = ({map}: OfflineMapControlProps) => {
     }
   }
   return (
-    render()
+    <>
+      <Modal visible={isModalOpen} animationType="slide">
+        <ListCity />
+      </Modal>
+    {
+      render()
+    }
+    </>
   );
 };
 
