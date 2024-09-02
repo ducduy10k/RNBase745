@@ -2,6 +2,7 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import CustomIcon from '../../../../../components/CustomIcon'
 import Mapbox from '@rnmapbox/maps'
+import { getBoundbox } from '../../../../../utils/mapbox'
 
 interface CityMapOfflineItemProps{
     city: any
@@ -25,26 +26,32 @@ const CityMapOfflineItem = ({city}: CityMapOfflineItemProps) => {
         }
         const errorListener = (offlineRegion: any, err: any) => {
           console.log('error: ', offlineRegion, err);
-          Mapbox.offlineManager.unsubscribe('offlinePack');
+          Mapbox.offlineManager.unsubscribe('offline_'+city.properties.gid);
           setPercentage(0);
           setStatus(ControlStatus.Error);
-    
         }
-        const offlinePack = await Mapbox.offlineManager.getPack('offlinePack');
+        const offlinePack = await Mapbox.offlineManager.getPack('offline_'+city.properties.gid);
         if (offlinePack) {
-          await Mapbox.offlineManager.deletePack('offlinePack');
+          await Mapbox.offlineManager.deletePack('offline_'+city.properties.gid);
         }
-        await Mapbox.offlineManager.createPack(
+        const {xMax, yMax, xMin, yMin} = getBoundbox(city);
+        console.log(xMax, yMax, xMin, yMin);
+        
+        if (xMax && yMax &&xMin &&yMin) {
+          await Mapbox.offlineManager.createPack(
           {
-            name: 'offlinePack',
+            name: 'offline_'+city.properties.gid,
             styleURL: 'mapbox://styles/mapbox/streets-v12',
             minZoom: 14,
             maxZoom: 20,
-            bounds: [[106.6973376145533, 10.7791546909693], [106.70357106825233, 10.77426430960464]],
+            bounds: [[xMin, yMin], [xMax, yMax]],
           },
           progressListener,
           errorListener,
         );
+        } else {
+          throw new Error('Invalid coordinates')
+        }
       };
 
       function confirmRedownload() {

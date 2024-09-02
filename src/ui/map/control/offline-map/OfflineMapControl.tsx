@@ -14,7 +14,7 @@ const OfflineMapControl = ({map}: OfflineMapControlProps) => {
   return (
     <>
       <Modal visible={isModalOpen} animationType="slide">
-        <ListCity />
+        <ListCity onClose={() => setIsModalOpen(false)} />
       </Modal>
       <Pressable onPress={() => setIsModalOpen(true)}>
             <View style={styles.controlWrapper}>
