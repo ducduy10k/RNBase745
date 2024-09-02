@@ -145,5 +145,6 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 1,
     padding: 5,
+    gap: 5
   },
 });
