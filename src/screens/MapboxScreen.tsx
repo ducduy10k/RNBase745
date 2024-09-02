@@ -13,6 +13,7 @@ import {Text} from '@rneui/base';
 import {generateString} from '../utils/common';
 import SearchLocationControl from '../ui/map/control/search-location/SearchLocationControl';
 import OfflineMapControl from '../ui/map/control/offline-map/OfflineMapControl';
+import ZoomControl from '../ui/map/control/zoom/ZoomControl';
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiYmV0YXBjaG9pMTBrIiwiYSI6ImNsd2o1cGRmcTBxZGsyaXBmd2J2emRwc28ifQ.sg6Y6R2AWkqU5v0HwXHCyQ',
 );
@@ -96,6 +97,7 @@ const MapboxScreen: React.FC<MapboxScreenProps> = ({navigation}) => {
       </View>
 
       <View style={styles.btnControlBottomRight}>
+      {mapRef.current && <ZoomControl map={mapRef.current}  mapCamera={cameraRef.current} />}
         <GeoLocateControl
           key={generateString(5)}
           mapCamera={cameraRef.current}
