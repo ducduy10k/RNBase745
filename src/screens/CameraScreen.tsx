@@ -45,7 +45,6 @@ const CameraScreen = ({navigation}: CameraScreenProps) => {
       return;
     }
     const photo = await cameraRef.current?.takePhoto();
-    console.log('photo:', photo);
     setPhoto(photo);
     setIsOpenPhotoResult(true);
   };

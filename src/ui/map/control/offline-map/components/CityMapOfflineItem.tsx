@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import CustomIcon from '../../../../../components/CustomIcon'
 import Mapbox from '@rnmapbox/maps'
 import { getBoundbox } from '../../../../../utils/mapbox'
+import OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack'
 
 interface CityMapOfflineItemProps{
-    city: any
+    city: any;
+    defaultPack?: OfflinePack
 }
 
 enum ControlStatus {
@@ -15,9 +17,9 @@ enum ControlStatus {
     Finish
   }
 
-const CityMapOfflineItem = ({city}: CityMapOfflineItemProps) => {
-    const [percentage, setPercentage] = useState(0);
-    const [status, setStatus] = useState<ControlStatus>(ControlStatus.Idle);
+const CityMapOfflineItem = ({city, defaultPack}: CityMapOfflineItemProps) => {
+  const [percentage, setPercentage] = useState(0);
+    const [status, setStatus] = useState<ControlStatus>((defaultPack as any)?.pack?.state == 'complete' ? ControlStatus.Finish :ControlStatus.Idle);
     const handleDownload = async () => {
         const progressListener = (offlineRegion: any, status: any) => {
           console.log('done: ', offlineRegion, status);
@@ -35,8 +37,6 @@ const CityMapOfflineItem = ({city}: CityMapOfflineItemProps) => {
           await Mapbox.offlineManager.deletePack('offline_'+city.properties.gid);
         }
         const {xMax, yMax, xMin, yMin} = getBoundbox(city);
-        console.log(xMax, yMax, xMin, yMin);
-        
         if (xMax && yMax &&xMin &&yMin) {
           await Mapbox.offlineManager.createPack(
           {
@@ -58,7 +58,6 @@ const CityMapOfflineItem = ({city}: CityMapOfflineItemProps) => {
         Alert.alert('Bản đồ đã được tải.', 'Bạn có muốn cập nhật mới nhất không', [
             {
               text: 'Đóng',
-              onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
             {text: 'Tải lại', onPress: () => handleDownload()},
@@ -80,7 +79,7 @@ const CityMapOfflineItem = ({city}: CityMapOfflineItemProps) => {
           case ControlStatus.Error:
             return (
               <Pressable onPress={() => handleDownload()}>
-                  <CustomIcon name="undo" lib="Ant" size={16} />
+                  <CustomIcon name="reload1" lib="Ant" size={16} />
               </Pressable>
             );
           case ControlStatus.Finish: {
