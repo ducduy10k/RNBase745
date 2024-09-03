@@ -1,4 +1,4 @@
-import React, {useRef, useState, useCallback} from 'react';
+import React, {useRef, useState, useCallback, useEffect} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -20,6 +20,7 @@ import {Product} from '../models/product.model';
 import {useFocusEffect} from '@react-navigation/native';
 import HomeSearch from '../ui/home/search/Search';
 import ProductData from '../data/ProductData';
+import { egstart } from '../job/getLocation';
 interface HomeScreenProps {
   navigation: any;
 }
@@ -33,6 +34,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     index: undefined,
     category: undefined,
   });
+  useEffect(() => {
+    // egstart();
+  }, [])
   const [sortItem, setSortItem] = useState(undefined);
   const tabBarHeight = useBottomTabBarHeight();
 

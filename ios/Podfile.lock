@@ -946,6 +946,8 @@ PODS:
   - React-Mapbuffer (0.74.5):
     - glog
     - React-debug
+  - react-native-background-actions (4.0.1):
+    - React-Core
   - react-native-geolocation (3.3.0):
     - DoubleConversion
     - glog
@@ -1277,6 +1279,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-background-actions (from `../node_modules/react-native-background-actions`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1381,6 +1384,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-background-actions:
+    :path: "../node_modules/react-native-background-actions"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-safe-area-context:
@@ -1478,6 +1483,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 3b6060bbf5317663667e1dd93560c7943ab86ccc
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
+  react-native-background-actions: ea5bab231a28710eea614acb9ca595594415a5ec
   react-native-geolocation: 5c5dd5de4571c55014e9e98214b273eed854f293
   react-native-safe-area-context: ab8f4a3d8180913bd78ae75dd599c94cce3d5e9a
   React-nativeconfig: ba9a2e54e2f0882cf7882698825052793ed4c851

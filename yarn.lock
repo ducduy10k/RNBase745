@@ -3766,6 +3766,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+eventemitter3@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
+  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
 execa@^5.0.0, execa@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/execa/-/execa-5.1.1.tgz"
@@ -6137,6 +6142,13 @@ react-is@^18.2.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
+react-native-background-actions@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/react-native-background-actions/-/react-native-background-actions-4.0.1.tgz"
+  integrity sha512-LADhnb4ag1oH5Lotq0j8K9e2cFmrafFyg2PCME88VkTjqDUgNcJonkNdMCTHN0N3fh+hwAA7nDR4Cxkj9Q8eCw==
+  dependencies:
+    eventemitter3 "^4.0.7"
+
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
@@ -6180,7 +6192,7 @@ react-native-vision-camera@^4.5.1:
   resolved "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-4.5.1.tgz"
   integrity sha512-ob7gfBYin4lG2zlzRr5y4rYJN3NCCyJotFX1z3ul8V0N2GwkCGh31cko6hF9DXG4VocSPVYKt+K5W0CWLp3y0g==
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", react-native@^0.74.5, react-native@>=0.59.9:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", react-native@^0.74.5, react-native@>=0.47.0, react-native@>=0.59.9:
   version "0.74.5"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.5.tgz"
   integrity sha512-Bgg2WvxaGODukJMTZFTZBNMKVaROHLwSb8VAGEdrlvKwfb1hHg/3aXTUICYk7dwgAnb+INbGMwnF8yeAgIUmqw==
