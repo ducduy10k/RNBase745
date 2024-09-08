@@ -8,9 +8,10 @@ import Mapbox from '@rnmapbox/maps';
 
 interface SearchLocationControlProps {
   mapCamera?: Mapbox.Camera | null;
+  onSearch: (item: RecentSearchItemI) => void
 }
 
-const SearchLocationControl = ({mapCamera}: SearchLocationControlProps) => {
+const SearchLocationControl = ({mapCamera, onSearch}: SearchLocationControlProps) => {
   const [isModalSearchOpen, setIsModalSearchOpen] = useState(false);
   
   const handlePress = (item: RecentSearchItemI) => {
@@ -28,6 +29,8 @@ const SearchLocationControl = ({mapCamera}: SearchLocationControlProps) => {
       pitch: 0,
       heading: 0,
     });
+    onSearch(item);
+
   }
 
   return (

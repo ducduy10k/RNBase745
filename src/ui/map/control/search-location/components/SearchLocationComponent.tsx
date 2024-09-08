@@ -97,6 +97,7 @@ const SearchLocationComponent = ({onBack, onPress}: SearchLocationComponentProps
           onChangeText={setSearchString}
           props={{
             returnKeyType: 'done',
+            autoFocus: true,
             async onSubmitEditing() {
               // Do something
               const createdTime = new Date();
