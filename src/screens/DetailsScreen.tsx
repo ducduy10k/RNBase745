@@ -46,7 +46,7 @@ const DetailsScreen = ({navigation, route}: DetailScreenProps) => {
   
   return item ? (
     <View style={styles.detailScreenContainer}>
-      <StatusBar backgroundColor={'pink'} />
+      <StatusBar />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.detailScreenView}>

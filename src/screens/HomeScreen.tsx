@@ -85,7 +85,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   }
   return (
     <View style={styles.homeContainer}>
-      <StatusBar backgroundColor={'pink'} />
+      <StatusBar backgroundColor={'white'} />
       <Modal visible={visibleModalSearch} animationType="slide">
         <HomeSearch onClose={() => setVisibleModalSearch(false)} />
       </Modal>
